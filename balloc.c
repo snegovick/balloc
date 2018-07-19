@@ -185,7 +185,7 @@ balloc(size_t size) {
     if (size<=((size_t)b_sizes[i])) {
       bn = balloc_find_free_bit(i);
       if (bn>=0) {
-        dbg("Allocating bucket of size %i\n", b_sizes[i]);
+        dbg("Allocating bucket of size %i", b_sizes[i]);
         balloc_set_busy_bit(i, bn);
         pblc->buck_info.n_busy[i] += 1;
 #ifdef B_STATISTICS
@@ -213,7 +213,7 @@ bfree_ex(void *ptr, int is_realloc) {
       berr("Pointer %p is missaligned relative to bucket %p", ptr, cptr);
       return;
     }
-    dbg("Freeing bucket of size %i\n", b_sizes[s]);
+    dbg("Freeing bucket of size %i", b_sizes[s]);
     balloc_unset_busy_bit(s, n);
     pblc->buck_info.n_busy[s] -= 1;
 #ifdef B_STATISTICS
@@ -234,7 +234,7 @@ brealloc(void *ptr, size_t new_size) {
   enum B_SIZES i;
   int bn = 0;
   void *nptr;
-  dbg("brealloc %li\n", new_size);
+  dbg("brealloc %li", new_size);
 
   if (ptr == NULL) {
     return balloc(new_size);
@@ -247,7 +247,7 @@ brealloc(void *ptr, size_t new_size) {
       return NULL;
     }
     if (new_size <= ((size_t)b_sizes[s])) {
-      dbg("New size is smaller than current bucket\n");
+      dbg("New size is smaller than current bucket");
       //if new size is smaller than currently allocated bucket, there
       //are two posibilities:
       //1. the size is bigger than previously allocated
@@ -255,9 +255,9 @@ brealloc(void *ptr, size_t new_size) {
       //anyhow, we dont store requested size, so just check if this data
       //can be reallocated in smaller bucket
       for (i=0;i<s;i++) {
-        dbg("Checking bucket size %i/%li\n", b_sizes[i], new_size);
+        dbg("Checking bucket size %i/%li", b_sizes[i], new_size);
         if (new_size<=((size_t)b_sizes[i])) {
-          dbg("This bucket size fits\n");
+          dbg("This bucket size fits");
           //smaller bucket fits
           bn = balloc_find_free_bit(i);
           if (bn>=0) {
