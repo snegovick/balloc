@@ -25,7 +25,7 @@
 
 static const int b_sizes[BN] = {16, 32, 64, 128, 256, 512, 1024, 2048};
 static const int b_qtys[BN] = {B16QTY, B32QTY, B64QTY, B128QTY, B256QTY, B512QTY, B1024QTY, B2048QTY};
-static const int b_busy_ofs[BN] = {B_BUSY_OFS_16, B_BUSY_OFS_16, B_BUSY_OFS_16, B_BUSY_OFS_16, B_BUSY_OFS_16, B_BUSY_OFS_16, B_BUSY_OFS_16, B_BUSY_OFS_16};
+static const int b_busy_ofs[BN] = {B_BUSY_OFS_16, B_BUSY_OFS_32, B_BUSY_OFS_64, B_BUSY_OFS_128, B_BUSY_OFS_256, B_BUSY_OFS_512, B_BUSY_OFS_1024, B_BUSY_OFS_2048};
 static const int b_offsets[BN] = {B_OFS_16,
                                   B_OFS_32,
                                   B_OFS_64,
@@ -213,6 +213,7 @@ bfree_ex(void *ptr, int is_realloc) {
       berr("Pointer %p is missaligned relative to bucket %p", ptr, cptr);
       return;
     }
+    dbg("Freeing bucket of size %i\n", b_sizes[s]);
     balloc_unset_busy_bit(s, n);
     pblc->buck_info.n_busy[s] -= 1;
 #ifdef B_STATISTICS

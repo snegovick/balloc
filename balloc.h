@@ -57,11 +57,15 @@ enum B_SIZES {
   #ifdef B_DBG_MSG
     #define dbg(...) {printf(__VA_ARGS__); printf(B_LE);}
   #else
-    #define dbg(...)
+    #ifndef dbg
+      #define dbg(...)
+    #endif
   #endif
   #define berr(...) {printf("\r\nBALLOC ERROR: "); printf(__VA_ARGS__); printf(B_LE);}
 #else
-  #define berr(...)
+  #ifndef berr
+    #define berr(...)
+  #endif
 #endif
 
 typedef struct {
