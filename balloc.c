@@ -98,28 +98,37 @@ balloc_init(void) {
 static int
 balloc_set_busy_bit(enum B_SIZES s, int n) {
   int offt = b_busy_ofs[s]+n;
-  int byte = offt/8;
+  int bte = offt/8;
   int bit = offt%8;
-  int busy = pblc->buck_info.busy[byte]&(1<<bit);
+  //dbg("set busy bit. size: %i, offt: %i, byte: %i, bit: %i, n: %i, bofs: %i", s, offt, bte, bit, n, b_busy_ofs[s]);
+  if ((bte*8+bit)>BTOTALQTY) {
+    berr("Busy bit out of bounds: %i>%i", bte*8+bit, BTOTALQTY);
+  }
+  int busy = pblc->buck_info.busy[bte]&(1<<bit);
   if (busy) {
     berr("Trying to set busy bucket busy again, this is like bad kinda, mmkay? Dont do this");
     return -1;
   }
-  pblc->buck_info.busy[byte] |= (1<<bit);
+  pblc->buck_info.busy[bte] |= (1<<bit);
   return 0;
 }
 
 static int
 balloc_unset_busy_bit(enum B_SIZES s, int n) {
   int offt = b_busy_ofs[s]+n;
-  int byte = offt/8;
+  int bte = offt/8;
   int bit = offt%8;
-  int busy = pblc->buck_info.busy[byte]&(1<<bit);
+  //dbg("unset busy bit. size: %i, offt: %i, byte: %i, bit: %i, n: %i, bofs: %i", s, offt, bte, bit, n, b_busy_ofs[s]);
+  if ((bte*8+bit)>BTOTALQTY) {
+    berr("Busy bit out of bounds: %i>%i", bte*8+bit, BTOTALQTY);
+  }
+
+  int busy = pblc->buck_info.busy[bte]&(1<<bit);
   if (!busy) {
     berr("Trying to unset busy flag for free bucket");
     return -1;
   }
-  pblc->buck_info.busy[byte] &= ~(1<<bit);
+  pblc->buck_info.busy[bte] &= ~(1<<bit);
   return 0;
 }
 
@@ -131,11 +140,15 @@ balloc_find_free_bit(enum B_SIZES s) {
   }
   for (;i<b_qtys[s];i++) {
     int offt = b_busy_ofs[s]+i;
-    int byte = offt/8;
+    int bte = offt/8;
     int bit = offt%8;
-    int busy = pblc->buck_info.busy[byte]&(1<<bit);
+    if ((bte*8+bit)>BTOTALQTY) {
+      berr("Busy bit out of bounds: %i>%i", bte*8+bit, BTOTALQTY);
+    }
+    //dbg("find free bit. size: %i, offt: %i, byte: %i, bit: %i, bofs: %i", s, offt, bte, bit, b_busy_ofs[s]);
+    int busy = pblc->buck_info.busy[bte]&(1<<bit);
     if (!busy) {
-      return bit;
+      return i;
     }
   }
   berr("Free bit not found even though n_busy reports free buckets [%i/%i]", pblc->buck_info.n_busy[s], b_qtys[s]);
