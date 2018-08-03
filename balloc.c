@@ -13,6 +13,9 @@
 #define B_OFS_512  (B_OFS_256+256*B256QTY)
 #define B_OFS_1024 (B_OFS_512+512*B512QTY)
 #define B_OFS_2048 (B_OFS_1024+1024*B1024QTY)
+#define B_OFS_4096 (B_OFS_2048+2048*B2048QTY)
+#define B_OFS_8192 (B_OFS_4096+4096*B4096QTY)
+#define B_OFS_16384 (B_OFS_8192+8192*B8192QTY)
 
 #define B_BUSY_OFS_16 (0)
 #define B_BUSY_OFS_32 (B_BUSY_OFS_16+B16QTY)
@@ -22,10 +25,13 @@
 #define B_BUSY_OFS_512 (B_BUSY_OFS_256+B256QTY)
 #define B_BUSY_OFS_1024 (B_BUSY_OFS_512+B512QTY)
 #define B_BUSY_OFS_2048 (B_BUSY_OFS_1024+B1024QTY)
+#define B_BUSY_OFS_4096 (B_BUSY_OFS_2048+B2048QTY)
+#define B_BUSY_OFS_8192 (B_BUSY_OFS_4096+B4096QTY)
+#define B_BUSY_OFS_16384 (B_BUSY_OFS_8192+B8192QTY)
 
-static const int b_sizes[BN] = {16, 32, 64, 128, 256, 512, 1024, 2048};
-static const int b_qtys[BN] = {B16QTY, B32QTY, B64QTY, B128QTY, B256QTY, B512QTY, B1024QTY, B2048QTY};
-static const int b_busy_ofs[BN] = {B_BUSY_OFS_16, B_BUSY_OFS_32, B_BUSY_OFS_64, B_BUSY_OFS_128, B_BUSY_OFS_256, B_BUSY_OFS_512, B_BUSY_OFS_1024, B_BUSY_OFS_2048};
+static const int b_sizes[BN] = {16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384};
+static const int b_qtys[BN] = {B16QTY, B32QTY, B64QTY, B128QTY, B256QTY, B512QTY, B1024QTY, B2048QTY, B4096QTY, B8192QTY, B16384QTY};
+static const int b_busy_ofs[BN] = {B_BUSY_OFS_16, B_BUSY_OFS_32, B_BUSY_OFS_64, B_BUSY_OFS_128, B_BUSY_OFS_256, B_BUSY_OFS_512, B_BUSY_OFS_1024, B_BUSY_OFS_2048, B_BUSY_OFS_4096, B_BUSY_OFS_8192, B_BUSY_OFS_16384};
 static const int b_offsets[BN] = {B_OFS_16,
                                   B_OFS_32,
                                   B_OFS_64,
@@ -33,7 +39,10 @@ static const int b_offsets[BN] = {B_OFS_16,
                                   B_OFS_256,
                                   B_OFS_512,
                                   B_OFS_1024,
-                                  B_OFS_2048};
+                                  B_OFS_2048,
+                                  B_OFS_4096,
+                                  B_OFS_8192,
+                                  B_OFS_16384};
 
 #ifdef B_ALLOC_STORAGE
 balloc_storage_t blc;
